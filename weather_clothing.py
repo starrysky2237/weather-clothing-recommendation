@@ -1,66 +1,66 @@
-import streamlit as st
+ï»¿import streamlit as st
 import requests
 from geopy.geocoders import Nominatim
 
-# OpenWeatherMap API Å°
-API_KEY = '6c40b0820856d83a30916a4ad306b932'  # Á¦°øÇÏ½Å API Å° »ç¿ë
+# OpenWeatherMap API í‚¤
+API_KEY = '6c40b0820856d83a30916a4ad306b932'  # ì œê³µí•˜ì‹  API í‚¤ ì‚¬ìš©
 
-# ³¯¾¾ »óÅÂº° ¿ÊÂ÷¸² ÃßÃµ µñ¼Å³Ê¸®
+# ë‚ ì”¨ ìƒíƒœë³„ ì˜·ì°¨ë¦¼ ì¶”ì²œ ë”•ì…”ë„ˆë¦¬
 weather_clothing = {
-    'clear': '°¡º­¿î ¿ÊÀ» ÀÔÀ¸¼¼¿ä. Æ¼¼ÅÃ÷¿Í ¹İ¹ÙÁö°¡ ÀûÇÕÇÕ´Ï´Ù.',
-    'clouds': '°¡º­¿î ¿ÜÅõ¸¦ ÁØºñÇÏ¼¼¿ä. ÀÚÄÏÀÌ³ª ÈÄµåÆ¼¸¦ ÃßÃµÇÕ´Ï´Ù.',
-    'rain': '¿ì»êÀ» Ã¬±â¼¼¿ä! ¹æ¼ö ÀÚÄÏÀÌ³ª ¿ìºñ¸¦ ÀÔ´Â °ÍÀÌ ÁÁ½À´Ï´Ù.',
-    'snow': 'µû¶æÇÑ ¿ÊÀ» ÀÔÀ¸¼¼¿ä. ÆĞµùÀÌ³ª µÎ²¨¿î ¿ÜÅõ¸¦ ÃßÃµÇÕ´Ï´Ù.',
-    'drizzle': '¿ì»êÀ» Ã¬±â¼¼¿ä. °¡º­¿î ¿ÜÅõ¿Í ÇÔ²² ÀÔÀ¸¼¼¿ä.',
-    'thunderstorm': 'ºñ¹Ù¶÷ÀÌ °­ÇÏ´Ï ¹æ¼ö ±â´ÉÀÌ ÀÖ´Â ¿ÊÀ» ÀÔ°í ¿ì»êÀ» Ã¬±â¼¼¿ä.',
-    'mist': '½Ã¾ß°¡ ÁÁÁö ¾ÊÀ¸´Ï ¹àÀº »ö»óÀÇ ¿ÊÀ» ÀÔÀ¸¼¼¿ä.'
+    'clear': 'ê°€ë²¼ìš´ ì˜·ì„ ì…ìœ¼ì„¸ìš”. í‹°ì…”ì¸ ì™€ ë°˜ë°”ì§€ê°€ ì í•©í•©ë‹ˆë‹¤.',
+    'clouds': 'ê°€ë²¼ìš´ ì™¸íˆ¬ë¥¼ ì¤€ë¹„í•˜ì„¸ìš”. ìì¼“ì´ë‚˜ í›„ë“œí‹°ë¥¼ ì¶”ì²œí•©ë‹ˆë‹¤.',
+    'rain': 'ìš°ì‚°ì„ ì±™ê¸°ì„¸ìš”! ë°©ìˆ˜ ìì¼“ì´ë‚˜ ìš°ë¹„ë¥¼ ì…ëŠ” ê²ƒì´ ì¢‹ìŠµë‹ˆë‹¤.',
+    'snow': 'ë”°ëœ»í•œ ì˜·ì„ ì…ìœ¼ì„¸ìš”. íŒ¨ë”©ì´ë‚˜ ë‘êº¼ìš´ ì™¸íˆ¬ë¥¼ ì¶”ì²œí•©ë‹ˆë‹¤.',
+    'drizzle': 'ìš°ì‚°ì„ ì±™ê¸°ì„¸ìš”. ê°€ë²¼ìš´ ì™¸íˆ¬ì™€ í•¨ê»˜ ì…ìœ¼ì„¸ìš”.',
+    'thunderstorm': 'ë¹„ë°”ëŒì´ ê°•í•˜ë‹ˆ ë°©ìˆ˜ ê¸°ëŠ¥ì´ ìˆëŠ” ì˜·ì„ ì…ê³  ìš°ì‚°ì„ ì±™ê¸°ì„¸ìš”.',
+    'mist': 'ì‹œì•¼ê°€ ì¢‹ì§€ ì•Šìœ¼ë‹ˆ ë°ì€ ìƒ‰ìƒì˜ ì˜·ì„ ì…ìœ¼ì„¸ìš”.'
 }
 
-# À§Ä¡ Á¤º¸¸¦ ÅëÇØ ³¯¾¾ µ¥ÀÌÅÍ °¡Á®¿À±â
+# ìœ„ì¹˜ ì •ë³´ë¥¼ í†µí•´ ë‚ ì”¨ ë°ì´í„° ê°€ì ¸ì˜¤ê¸°
 def get_weather_data():
     geolocator = Nominatim(user_agent="weather_app")
-    location = geolocator.geocode("Seoul, South Korea")  # ¿¹½Ã: ¼­¿ï À§Ä¡
+    location = geolocator.geocode("Seoul, South Korea")  # ì˜ˆì‹œ: ì„œìš¸ ìœ„ì¹˜
     lat = location.latitude
     lon = location.longitude
     
-    # OpenWeatherMap API ¿äÃ»
+    # OpenWeatherMap API ìš”ì²­
     url = f'http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API_KEY}&units=metric&lang=kr'
     response = requests.get(url)
     data = response.json()
 
     if data['cod'] != 200:
-        st.error("³¯¾¾ µ¥ÀÌÅÍ¸¦ °¡Á®¿À´Â µ¥ ½ÇÆĞÇß½À´Ï´Ù.")
+        st.error("ë‚ ì”¨ ë°ì´í„°ë¥¼ ê°€ì ¸ì˜¤ëŠ” ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.")
         return None
 
     return data
 
-# ¿ÊÂ÷¸² ÃßÃµ ÇÔ¼ö
+# ì˜·ì°¨ë¦¼ ì¶”ì²œ í•¨ìˆ˜
 def recommend_clothing(temp, weather_conditions):
     if temp >= 28:
-        return "¹Î¼Ò¸Å, ¹İÆÈ, ¹İ¹ÙÁö, ¿øÇÇ½º"
+        return "ë¯¼ì†Œë§¤, ë°˜íŒ”, ë°˜ë°”ì§€, ì›í”¼ìŠ¤"
     elif 23 <= temp < 28:
-        return "¹İÆÈ, ¾ãÀº ¼ÅÃ÷, ¹İ¹ÙÁö, ¸é¹ÙÁö"
+        return "ë°˜íŒ”, ì–‡ì€ ì…”ì¸ , ë°˜ë°”ì§€, ë©´ë°”ì§€"
     elif 20 <= temp < 23:
-        return "¾ãÀº °¡µğ°Ç, ±äÆÈ, ¸é¹ÙÁö, Ã»¹ÙÁö"
+        return "ì–‡ì€ ê°€ë””ê±´, ê¸´íŒ”, ë©´ë°”ì§€, ì²­ë°”ì§€"
     elif 17 <= temp < 20:
-        return "¾ãÀº ´ÏÆ®, ¸ÇÅõ¸Ç, °¡µğ°Ç, Ã»¹ÙÁö"
+        return "ì–‡ì€ ë‹ˆíŠ¸, ë§¨íˆ¬ë§¨, ê°€ë””ê±´, ì²­ë°”ì§€"
     elif 12 <= temp < 17:
-        return "ÀÚÄÏ, °¡µğ°Ç, ¾ß»ó, ½ºÅ¸Å·, Ã»¹ÙÁö, ¸é¹ÙÁö"
+        return "ìì¼“, ê°€ë””ê±´, ì•¼ìƒ, ìŠ¤íƒ€í‚¹, ì²­ë°”ì§€, ë©´ë°”ì§€"
     elif 9 <= temp < 12:
-        return "ÀÚÄÏ, Æ®·»Ä¡ÄÚÆ®, ¾ß»ó, ´ÏÆ®, Ã»¹ÙÁö, ½ºÅ¸Å·"
+        return "ìì¼“, íŠ¸ë Œì¹˜ì½”íŠ¸, ì•¼ìƒ, ë‹ˆíŠ¸, ì²­ë°”ì§€, ìŠ¤íƒ€í‚¹"
     elif 5 <= temp < 9:
-        return "ÄÚÆ®, °¡Á·ÀÚÄÏ, È÷Æ®ÅØ, ´ÏÆ®, ·¹±ë½º"
+        return "ì½”íŠ¸, ê°€ì¡±ìì¼“, íˆíŠ¸í…, ë‹ˆíŠ¸, ë ˆê¹…ìŠ¤"
     else:
-        return "ÆĞµù, µÎ²¨¿îÄÚÆ®, ¸ñµµ¸®, ±â¸ğÁ¦Ç°"
+        return "íŒ¨ë”©, ë‘êº¼ìš´ì½”íŠ¸, ëª©ë„ë¦¬, ê¸°ëª¨ì œí’ˆ"
 
     if 'rain' in weather_conditions.lower():
-        return "¿ì»êÀ» Ã¬±â¼¼¿ä! ºñ°¡ ¿Ã ¼ö ÀÖ½À´Ï´Ù."
-    return "³¯¾¾¿¡ ¸Â´Â ¿ÊÀ» ÁØºñÇÏ¼¼¿ä."
+        return "ìš°ì‚°ì„ ì±™ê¸°ì„¸ìš”! ë¹„ê°€ ì˜¬ ìˆ˜ ìˆìŠµë‹ˆë‹¤."
+    return "ë‚ ì”¨ì— ë§ëŠ” ì˜·ì„ ì¤€ë¹„í•˜ì„¸ìš”."
 
-# Streamlit ¾Û
-st.title("¿À´ÃÀÇ ³¯¾¾¿¡ ¸Â´Â ¿ÊÂ÷¸² ÃßÃµ")
+# Streamlit ì•±
+st.title("ì˜¤ëŠ˜ì˜ ë‚ ì”¨ì— ë§ëŠ” ì˜·ì°¨ë¦¼ ì¶”ì²œ")
 
-# ³¯¾¾ µ¥ÀÌÅÍ °¡Á®¿À±â
+# ë‚ ì”¨ ë°ì´í„° ê°€ì ¸ì˜¤ê¸°
 weather_data = get_weather_data()
 
 if weather_data:
@@ -70,17 +70,17 @@ if weather_data:
     city_name = weather_data['name']
     country = weather_data['sys']['country']
     
-    # ³¯¾¾ Á¤º¸ Ãâ·Â
-    st.write(f"**À§Ä¡**: {city_name}, {country}")
-    st.write(f"**ÇöÀç ¿Âµµ**: {temp}¡ÆC")
-    st.write(f"**³¯¾¾ »óÅÂ**: {description}")
+    # ë‚ ì”¨ ì •ë³´ ì¶œë ¥
+    st.write(f"**ìœ„ì¹˜**: {city_name}, {country}")
+    st.write(f"**í˜„ì¬ ì˜¨ë„**: {temp}Â°C")
+    st.write(f"**ë‚ ì”¨ ìƒíƒœ**: {description}")
     
-    # ¿ÊÂ÷¸² ÃßÃµ
+    # ì˜·ì°¨ë¦¼ ì¶”ì²œ
     clothing_recommendation = recommend_clothing(temp, description)
-    st.write(f"**ÃßÃµ ¿ÊÂ÷¸²**: {clothing_recommendation}")
+    st.write(f"**ì¶”ì²œ ì˜·ì°¨ë¦¼**: {clothing_recommendation}")
     
-    # ³¯¾¾ ¾ÆÀÌÄÜ Ç¥½Ã
+    # ë‚ ì”¨ ì•„ì´ì½˜ í‘œì‹œ
     icon_url = f'http://openweathermap.org/img/wn/{weather_icon}.png'
     st.image(icon_url, width=100)
 else:
-    st.error("³¯¾¾ µ¥ÀÌÅÍ¸¦ °¡Á®¿À´Â µ¥ ½ÇÆĞÇß½À´Ï´Ù.")
+    st.error("ë‚ ì”¨ ë°ì´í„°ë¥¼ ê°€ì ¸ì˜¤ëŠ” ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.")
